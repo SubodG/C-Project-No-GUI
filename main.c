@@ -2,14 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Define the product structure
+
 struct product {
     char name[100];
     int price;
     int id;
 };
 
-// Function Prototypes
+
 void printMainMenu();
 void printAdminMenu();
 void printCustomerMenu();
@@ -27,12 +27,12 @@ void waitForKeyPress();
 void loginAdmin();
 void loginCustomer();
 
-// Function to clear the screen
+
 void clearScreen() {
-    printf("\033[H\033[J"); // ANSI escape code to clear the screen
+    printf("\033[H\033[J"); 
 }
 
-// Function to wait for key press to return to the previous menu
+
 void waitForKeyPress() {
     printf("Press any key to return to the previous menu...");
     getchar();
@@ -40,7 +40,7 @@ void waitForKeyPress() {
     clearScreen();
 }
 
-// Function to print the main menu
+
 void printMainMenu() {
     clearScreen();
     printf("\n=================================\n");
@@ -53,7 +53,7 @@ void printMainMenu() {
     printf(" Choose an option: ");
 }
 
-// Function to print the admin menu
+
 void printAdminMenu() {
     clearScreen();
     printf("\n==============================\n");
@@ -69,7 +69,7 @@ void printAdminMenu() {
     printf(" Choose an option: ");
 }
 
-// Function to print the customer menu
+
 void printCustomerMenu() {
     clearScreen();
     printf("\n==============================\n");
@@ -84,7 +84,7 @@ void printCustomerMenu() {
     printf(" Choose an option: ");
 }
 
-// Function to view products
+
 void viewProducts() {
     struct product product;
     FILE *fptr = fopen("products.txt", "r");
@@ -104,19 +104,19 @@ void viewProducts() {
     waitForKeyPress();
 }
 
-// Function to add a product to inventory (Admin only)
+
 void addProduct() {
     struct product product;
     printf("Enter product ID: ");
     scanf("%d", &product.id);
     
-    // Clear the input buffer before using fgets
+    
     getchar();
 
     printf("Enter product name: ");
     fgets(product.name, sizeof(product.name), stdin);
     
-    // Remove the trailing newline character that fgets captures
+    
     product.name[strcspn(product.name, "\n")] = '\0';
     
     printf("Enter product price: ");
@@ -133,7 +133,7 @@ void addProduct() {
     waitForKeyPress();
 }
 
-// Function to remove a product from inventory (Admin only)
+
 void removeProduct() {
     int productId;
     printf("Enter the product ID to remove: ");
@@ -157,7 +157,7 @@ void removeProduct() {
     while (fread(&product, sizeof(product), 1, fptr)) {
         if (product.id == productId) {
             found = 1;
-            continue; // Skip writing the removed product
+            continue; 
         }
         fwrite(&product, sizeof(product), 1, tempFptr);
     }
@@ -176,7 +176,7 @@ void removeProduct() {
     waitForKeyPress();
 }
 
-// Function to update a product (Admin only)
+
 void updateProduct() {
     int productId;
     printf("Enter the product ID to update: ");
@@ -202,7 +202,7 @@ void updateProduct() {
             found = 1;
             printf("Product found: %s | Price: %d\n", product.name, product.price);
             printf("Enter new product name: ");
-            getchar();  // Clear buffer before fgets
+            getchar();  
             fgets(product.name, sizeof(product.name), stdin);
             product.name[strcspn(product.name, "\n")] = '\0';
             printf("Enter new product price: ");
@@ -225,7 +225,7 @@ void updateProduct() {
     waitForKeyPress();
 }
 
-// Function to view purchase history (Admin only)
+
 void viewPurchaseHistory() {
     FILE *fptr = fopen("buyhistory.txt", "r");
     if (fptr == NULL) {
@@ -245,7 +245,7 @@ void viewPurchaseHistory() {
     waitForKeyPress();
 }
 
-// Function to save purchase history
+
 void savePurchaseHistory() {
     FILE *cartFile = fopen("cart.txt", "r");
     FILE *historyFile = fopen("buyhistory.txt", "a");
@@ -256,7 +256,7 @@ void savePurchaseHistory() {
 
     char customerName[100], phoneNumber[20];
     printf("Enter customer name: ");
-    getchar();  // Clear buffer before fgets
+    getchar();  
     fgets(customerName, sizeof(customerName), stdin);
     customerName[strcspn(customerName, "\n")] = '\0';
 
@@ -276,7 +276,7 @@ void savePurchaseHistory() {
     fclose(historyFile);
 }
 
-// Function to add a product to the cart (Customer only)
+
 void addToCart() {
     struct product product;
     int productId;
@@ -309,7 +309,7 @@ void addToCart() {
     waitForKeyPress();
 }
 
-// Function to view cart (Customer only)
+
 void viewCart() {
     struct product product;
     FILE *fptr = fopen("cart.txt", "r");
@@ -331,7 +331,7 @@ void viewCart() {
     waitForKeyPress();
 }
 
-// Function to checkout (Customer only)
+
 void checkout() {
     struct product product;
     FILE *fptr = fopen("cart.txt", "r");
@@ -351,20 +351,20 @@ void checkout() {
     printf("=================================\n");
     fclose(fptr);
 
-    // Save purchase history
+    
     savePurchaseHistory();
     
-    // Remove cart items after checkout
+    
     remove("cart.txt");
     printf("Checkout complete. Thank you!\n");
     waitForKeyPress();
 }
 
-// Function to login as admin
+
 void loginAdmin() {
     char username[50], password[50];
     printf("Enter admin username: ");
-    getchar();  // Clear buffer before fgets
+    getchar();  
     fgets(username, sizeof(username), stdin);
     username[strcspn(username, "\n")] = '\0';
 
@@ -393,7 +393,7 @@ void loginAdmin() {
     }
 }
 
-// Function to login as customer
+
 void loginCustomer() {
     int choice;
     do {
@@ -410,7 +410,7 @@ void loginCustomer() {
     } while (choice != 5);
 }
 
-// Main function
+
 int main() {
     int choice;
     do {
