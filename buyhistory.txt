@@ -1,0 +1,10 @@
+
+Customer: Subodh | Phone: 9866723979
+ Product: Banana | Price: 10
+=================================
+Customer: Subodh | Phone: Gyawali
+ Product: Banana | Price: 10
+=================================
+Customer: Subodh Gyawali | Phone: 9866723979
+ Product: Banana | Price: 10
+=================================
