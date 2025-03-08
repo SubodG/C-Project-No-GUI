@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 
 
 struct product {
@@ -280,32 +281,45 @@ void savePurchaseHistory() {
 void addToCart() {
     struct product product;
     int productId;
-    printf("Enter product ID to add to cart: ");
-    scanf("%d", &productId);
+    char choice;
 
-    FILE *fptr = fopen("products.txt", "r");
-    if (fptr == NULL) {
-        printf("No products available.\n");
-        return;
-    }
+    do {
+        clearScreen();  
+        viewProducts(); 
+        
+        printf("\nEnter product ID to add to cart: ");
+        scanf("%d", &productId);
 
-    FILE *cartFptr = fopen("cart.txt", "a");
-    int found = 0;
-    while (fread(&product, sizeof(product), 1, fptr)) {
-        if (product.id == productId) {
-            fwrite(&product, sizeof(product), 1, cartFptr);
-            printf("Product added to cart: %s\n", product.name);
-            found = 1;
-            break;
+        FILE *fptr = fopen("products.txt", "r");
+        if (fptr == NULL) {
+            printf("No products available.\n");
+            return;
         }
-    }
 
-    fclose(fptr);
-    fclose(cartFptr);
+        FILE *cartFptr = fopen("cart.txt", "a");
+        int found = 0;
+        while (fread(&product, sizeof(product), 1, fptr)) {
+            if (product.id == productId) {
+                fwrite(&product, sizeof(product), 1, cartFptr);
+                printf(" Product added to cart: %s | Price: %d\n", product.name, product.price);
+                found = 1;
+                break;
+            }
+        }
 
-    if (!found) {
-        printf("Product not found.\n");
-    }
+        fclose(fptr);
+        fclose(cartFptr);
+
+        if (!found) {
+            printf(" Product not found. Please enter a valid ID.\n");
+        }
+
+        printf("\nDo you want to add another product to the cart? (y/n): ");
+        getchar(); 
+        choice = getchar();
+
+    } while (choice == 'y' || choice == 'Y');
+
     waitForKeyPress();
 }
 
@@ -358,19 +372,48 @@ void checkout() {
     remove("cart.txt");
     printf("Checkout complete. Thank you!\n");
     waitForKeyPress();
+    
+    printf("\nPayment pending");
+    for (int i = 0; i < 10; i++) {
+        printf(".");
+        fflush(stdout); 
+        sleep(1);
+    }
+    
+    printf("\nPayment successful! Thank you for your purchase.\n");
+
+    remove("cart.txt");
 }
 
 
 void loginAdmin() {
     char username[50], password[50];
+    int i = 0;
+
     printf("Enter admin username: ");
     getchar();  
     fgets(username, sizeof(username), stdin);
-    username[strcspn(username, "\n")] = '\0';
+    username[strcspn(username, "\n")] = '\0'; 
 
     printf("Enter admin password: ");
-    fgets(password, sizeof(password), stdin);
-    password[strcspn(password, "\n")] = '\0';
+    
+    
+    while (1) {
+        char ch = getch(); 
+        if (ch == 13) { 
+            password[i] = '\0';
+            break;
+        } else if (ch == 8 && i > 0) { 
+            printf("\b \b"); 
+            i--;
+        } else if (ch != 8) {
+            password[i++] = ch;
+            printf("*"); 
+        }
+    }
+
+    printf("\n"); 
+
     
     if (strcmp(username, "admin") == 0 && strcmp(password, "admin123") == 0) {
         int choice;
@@ -404,7 +447,7 @@ void loginCustomer() {
             case 2: addToCart(); break;
             case 3: viewCart(); break;
             case 4: checkout(); break;
-            case 5: printf("Logging out...\n"); break;
+            case 5: printf("Logging out...\n"); remove("cart.txt"); break;
             default: printf("Invalid choice.\n");
         }
     } while (choice != 5);

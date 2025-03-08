@@ -8,3 +8,12 @@ Customer: Subodh | Phone: Gyawali
 Customer: Subodh Gyawali | Phone: 9866723979
  Product: Banana | Price: 10
 =================================
+Customer: Subodh | Phone: 9348935
+ Product: Snikers | Price: 50
+=================================
+Customer: Subodh | Phone: 94945355
+ Product: Banana | Price: 10
+ Product: Banana | Price: 10
+ Product: Banana | Price: 10
+ Product: Snikers | Price: 50
+=================================
